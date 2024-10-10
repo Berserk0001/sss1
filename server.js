@@ -1,34 +1,30 @@
 #!/usr/bin/env node
-'use strict'
-const cluster = require("cluster");
-const os = require("os");
+'use strict';
 
-if (cluster.isPrimary) {
-  const numClusters = process.env.CLUSTERS || (os.availableParallelism ? os.availableParallelism() : (os.cpus().length || 2))
+const fastify = require('fastify')({ logger: true });
+const params = require('./src/params');
+const proxy = require('./src/proxy');
 
-  console.log(`Primary ${process.pid} is running. Will fork ${numClusters} clusters.`);
 
-  // Fork workers.
-  for (let i = 0; i < numClusters; i++) {
-    cluster.fork();
+
+// Route for proxying
+fastify.get('/', async (request, reply) => {
+  await params(request, reply);
+  await proxy(request, reply);
+  reply.send();
+});
+
+// Favicon route (Fastify automatically handles favicon requests, but here's how you can handle it)
+fastify.get('/favicon.ico', async (request, reply) => {
+  reply.code(204).send();
+});
+
+// Start server
+const PORT = process.env.PORT || 8080;
+fastify.listen({ port: PORT }, (err, address) => {
+  if (err) {
+    fastify.log.error(err);
+    process.exit(1);
   }
-
-  cluster.on('exit', (worker, code, signal) => {
-    console.log(`Worker ${worker.process.pid} died. Forking another one....`);
-    cluster.fork();
-  });
-
-  return true;
-}
-
-const app = require('express')()
-const authenticate = require('./src/authenticate')
-const params = require('./src/params')
-const proxy = require('./src/proxy')
-
-const PORT = process.env.PORT || 8080
-
-app.enable('trust proxy')
-app.get('/', authenticate, params, proxy)
-app.get('/favicon.ico', (req, res) => res.status(204).end())
-app.listen(PORT, () => console.log(`Worker ${process.pid}: Listening on ${PORT}`))
+  fastify.log.info(`Worker ${process.pid}: Listening on ${address}`);
+});
