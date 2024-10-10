@@ -10,7 +10,6 @@ async function proxy(request, reply) {
   let url = request.query.url;
   if (!url) {
     reply.send('bandwidth-hero-proxy');
-    return;
   }
 
   request.params.url = decodeURIComponent(url);
