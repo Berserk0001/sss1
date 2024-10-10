@@ -20,7 +20,7 @@ async function compress(request, reply, input) {
   // |x-bytes-saved  |Saved bandwidth from original photo|OriginSize - Compressed Size|
 
   try {
-    const output = await input
+    const output = await input.body
       .pipe(sharpStream()
         .grayscale(request.params.grayscale)
         .toFormat(format, {
