@@ -23,55 +23,41 @@ async function proxy(request, reply) {
   }
 
   try {
-    const response = await axios.get(request.params.url, {
-      headers: {
+        const response = await axios.get(request.params.url, {
+            headers: {
         ...pick(request.headers, ["cookie", "dnt", "referer", "range"]),
         "user-agent": "Bandwidth-Hero Compressor",
         "x-forwarded-for": request.headers["x-forwarded-for"] || request.ip,
         via: "1.1 bandwidth-hero",
       },
-      maxRedirects: 4, // Handle up to 4 redirects
-      responseType: 'stream', // Ensure we receive a stream for the body
-    });
+            responseType: 'stream', // Handle response as a stream
+            timeout: 10000,
+            maxRedirects: 5, // Max redirects allowed
+            decompress: false,
+            validateStatus: function (status) {
+        return status >= 200 && status < 300; // Default: Accept only 2xx status codes
+    },
+            
+        });
 
-    _onRequestResponse(response, request, reply);
-  } catch (err) {
-    _onRequestError(request, reply, err);
-  }
-}
+        // Proceed only if status code is 200
+        copyHdrs(response, reply);  // Copy headers from response to reply
+        reply.header('content-encoding', 'identity');
+        request.params.originType = response.headers['content-type'] || '';
+        request.params.originSize = parseInt(response.headers['content-length'], 10) || 0;
 
-function _onRequestError(request, reply, err) {
-  if (err.response && err.response.status === 400) {
-    return reply.code(400).send("Invalid URL");
-  }
+        const input = { body: response.data }; // Pass the stream
 
-  redirect(request, reply);
-  console.error(err);
-}
-
-function _onRequestResponse(response, request, reply) {
-  if (response.status >= 400 || (response.status >= 300 && response.headers.location)) {
-    return redirect(request, reply);
-  }
-
-  copyHeaders(response, reply);
-  reply.header("content-encoding", "identity");
-  reply.header("Access-Control-Allow-Origin", "*");
-  reply.header("Cross-Origin-Resource-Policy", "cross-origin");
-  reply.header("Cross-Origin-Embedder-Policy", "unsafe-none");
-  request.params.originType = response.headers["content-type"] || "";
-  request.params.originSize = response.headers["content-length"] || "0";
-
-  if (shouldCompress(request)) {
-    return compress(request, reply, response.data);
-  } else {
-    reply.header("x-proxy-bypass", 1);
-    ["accept-ranges", "content-type", "content-length", "content-range"].forEach((headerName) => {
-      if (headerName in response.headers) reply.header(headerName, response.headers[headerName]);
-    });
-
-    // Using reply.send to handle the stream
-    return reply.send(response.data); // Fastify manages the stream here
+        if (checkCompression(request)) {
+            return applyCompression(request, reply, input);
+        } else {
+            return performBypass(request, reply, response.data);
+        }
+    } catch (err) {
+        // Non-200 status or any other error, close the stream and send a basic error response
+        reply
+            .code(500)  // Internal server error
+            .send();
   }
 }
 
