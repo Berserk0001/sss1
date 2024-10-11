@@ -54,10 +54,7 @@ async function proxy(request, reply) {
             return performBypass(request, reply, response.data);
         }
     } catch (err) {
-        // Non-200 status or any other error, close the stream and send a basic error response
-        reply
-            .code(500)  // Internal server error
-            .send();
+        return redirect(request, reply);
   }
 }
 
