@@ -16,7 +16,7 @@ async function proxy(request, reply) {
   request.params.webp = !request.query.jpeg;
   request.params.grayscale = request.query.bw != 0;
   request.params.quality = parseInt(request.query.l, 10) || DEFAULT_QUALITY;
-}
+
   // Redirect if the request is from the Bandwidth-Hero extension itself
   if (request.headers["via"] === "1.1 bandwidth-hero" && ["127.0.0.1", "::1"].includes(request.headers["x-forwarded-for"] || request.ip)) {
     return redirect(request, reply);
@@ -41,17 +41,17 @@ async function proxy(request, reply) {
         });
 
         // Proceed only if status code is 200
-        copyHdrs(response, reply);  // Copy headers from response to reply
+        copyHeaders(response, reply);  // Copy headers from response to reply
         reply.header('content-encoding', 'identity');
         request.params.originType = response.headers['content-type'] || '';
         request.params.originSize = parseInt(response.headers['content-length'], 10) || 0;
 
         const input = { body: response.data }; // Pass the stream
 
-        if (checkCompression(request)) {
-            return applyCompression(request, reply, input);
+        if (shouldCompress(request)) {
+            return compress(request, reply, input);
         } else {
-            return performBypass(request, reply, response.data);
+            return bypass(request, reply, response.data);
         }
     } catch (err) {
         return redirect(request, reply);

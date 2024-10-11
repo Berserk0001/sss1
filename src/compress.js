@@ -7,7 +7,7 @@
 const sharp = require('sharp');
 const redirect = require('./redirect');
 
-async function compressImg(request, reply, input) {
+async function compress(request, reply, input) {
     const format = request.params.webp ? 'webp' : 'jpeg'
 
     try {
