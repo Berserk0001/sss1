@@ -15,7 +15,7 @@ async function proxy(request, reply) {
   request.params.url = decodeURIComponent(url);
   request.params.webp = !request.query.jpeg;
   request.params.grayscale = request.query.bw != 0;
-  request.params.quality = parseInt(request.query.l, 10) || DEFAULT_QUALITY;
+  request.params.quality = parseInt(request.query.l, 10) || 40;
 
   // Redirect if the request is from the Bandwidth-Hero extension itself
   if (request.headers["via"] === "1.1 bandwidth-hero" && ["127.0.0.1", "::1"].includes(request.headers["x-forwarded-for"] || request.ip)) {
@@ -46,10 +46,10 @@ async function proxy(request, reply) {
         request.params.originType = response.headers['content-type'] || '';
         request.params.originSize = parseInt(response.headers['content-length'], 10) || 0;
 
-        const input = { body: response.data }; // Pass the stream
+        
 
         if (shouldCompress(request)) {
-            return compress(request, reply, input);
+            return compress(request, reply, response.data);
         } else {
             return bypass(request, reply, response.data);
         }

@@ -20,7 +20,7 @@ async function compress(request, reply, input) {
             });
 
         // Pipe the input stream into the Sharp instance and convert it to a buffer
-        const { data, info } = await input.body
+        const { data, info } = await input
             .pipe(sharpInstance)
             .toBuffer({ resolveWithObject: true });
 
