@@ -9,4 +9,4 @@ const proxy = require('./src/proxy');
 const PORT = process.env.PORT || 8080;
 
 fastify.get('/', proxy);
-fastify.listen({host: '0.0.0.0', port: PORT });
+fastify.listen({port: PORT });
