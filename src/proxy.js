@@ -32,7 +32,7 @@ async function proxy(request, reply) {
       },
             responseType: 'stream', // Handle response as a stream
             timeout: 10000,
-            maxRedirects: 5, // Max redirects allowed
+            maxRedirects: 1, // Max redirects allowed
             decompress: false,
             validateStatus: function (status) {
         return status >= 200 && status < 300; // Default: Accept only 2xx status codes
