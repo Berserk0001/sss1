@@ -2,6 +2,7 @@
 const axios = require("axios");
 const pick = require("lodash").pick;
 const shouldCompress = require("./shouldCompress");
+const bypass = require("./bypass");
 const redirect = require("./redirect");
 const compress = require("./compress3");
 const copyHeaders = require("./copyHeaders");
