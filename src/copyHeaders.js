@@ -1,6 +1,6 @@
 "use strict";
 
-async function copyHeaders(source, reply) {
+function copyHeaders(source, reply) {
   for (const [key, value] of Object.entries(source.headers)) {
     try {
       reply.header(key, value); // Use Fastify's reply.header method
