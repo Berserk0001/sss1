@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 'use strict';
 
-const fastify = require('fastify')();
+const fastify = require('fastify')({trustProxy: true});
 const processRequest = require('./src/proxy.js'); // Import the default export
 
 const PORT = process.env.PORT || 8080;
