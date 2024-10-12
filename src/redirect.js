@@ -1,6 +1,6 @@
 "use strict";
 
-async function redirect(request, reply) {
+function redirect(request, reply) {
   if (reply.sent) return; // Check if headers have already been sent
 
   reply
