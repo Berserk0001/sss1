@@ -31,12 +31,10 @@ async function proxy(request, reply) {
         via: "1.1 bandwidth-hero",
       },
             responseType: 'stream', // Handle response as a stream
-            timeout: 10000,
-            maxRedirects: 1, // Max redirects allowed
-            decompress: false,
-            validateStatus: function (status) {
-        return status >= 200 && status < 300; // Default: Accept only 2xx status codes
-    },
+            
+            maxRedirects: 4, // Max redirects allowed
+            
+            
             
         });
 
