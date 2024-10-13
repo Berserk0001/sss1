@@ -9,6 +9,7 @@ async function compress(req, reply, input) {
             quality: req.params.quality,
             progressive: true,
             optimizeScans: true,
+            effort:0
         });
 
     try {
