@@ -13,11 +13,7 @@ function compress(request, reply, input) {
             optimizeScans: true,
         });
 
-    // Handle errors on the pipeline
-    pipeline.on('error', (err) => {
-        console.error('Compression error:', err);
-        redirect(request, reply); // Redirect on error
-    });
+    
 
     // Use the input stream to pipe into the sharp pipeline and convert it to a buffer
     input.pipe(pipeline)
