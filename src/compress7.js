@@ -9,9 +9,9 @@ worker.cache({ memory: 256, items: 2, files: 20 }); // Cache settings
 async function compress(req, reply, input) {
     const format = 'webp'; // Only use WebP format
 
-    // Log the current state of the worker queue and the start of compression
+  /*  // Log the current state of the worker queue and the start of compression
     console.log("QUEUE:: ", worker.counters());
-    console.log(`[COMPRESS] BEGIN: compressing file`);
+    console.log(`[COMPRESS] BEGIN: compressing file`);*/
 
     try {
         // Pipe the input stream into sharp, apply transformations, and send response directly
@@ -27,7 +27,7 @@ async function compress(req, reply, input) {
                 const metadata = await sharp(output).metadata(); // Retrieve metadata like file size
 
                 // Log the status of compression and details before sending response
-                console.log(`[COMPRESS] OK: compressed file sent, Original Size: ${req.params.originSize}, Compressed Size: ${metadata.size}, Bytes Saved: ${req.params.originSize - metadata.size}`);
+               /* console.log(`[COMPRESS] OK: compressed file sent, Original Size: ${req.params.originSize}, Compressed Size: ${metadata.size}, Bytes Saved: ${req.params.originSize - metadata.size}`);*/
 
                 // Set headers and send the compressed image as a response
                 reply
@@ -39,7 +39,7 @@ async function compress(req, reply, input) {
                     .send(output);
             });
     } catch (err) {
-        console.error('Compression error:', err);
+       /* console.error('Compression error:', err);*/
         return redirect(req, reply); // Redirect on error
     }
 }
