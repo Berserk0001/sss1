@@ -20,9 +20,8 @@ async function compress(req, reply, input) {
             quality: req.params.quality,
             progressive: true,
             optimizeScans: true,
-            effort: 1, // Use effort=1 for faster WebP compression
-            smartSubsample: true, // WebP specific option for better chroma subsampling
-            lossless: false // Lossless compression set to false
+            effort: 0, // Use effort=1 for faster WebP compression
+            
         });
 
     try {
@@ -35,6 +34,7 @@ async function compress(req, reply, input) {
             console.error('Image dimensions exceed WebP limits.');
             return redirect(req, reply); // Redirect if the image is too large
         }*/
+        console.log(`[COMPRESS] OK: compressed file sent`);
 
         // Set headers and send the compressed image as a response
         reply
@@ -45,7 +45,7 @@ async function compress(req, reply, input) {
             .code(200)
             .send(output);
 
-        console.log(`[COMPRESS] OK: compressed file sent ${req.path}`);
+        
     } catch (err) {
         console.error('Compression error:', err);
         return redirect(req, reply); // Redirect on error
