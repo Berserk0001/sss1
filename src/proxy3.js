@@ -1,10 +1,10 @@
 "use strict";
-const { request } = require("undici");
+const  undici = require("undici");
 const pick = require("lodash").pick;
 const shouldCompress = require("./shouldCompress");
 const bypass = require("./bypass");
 const redirect = require("./redirect");
-const compress = require("./compress4");
+const compress = require("./compress6");
 const copyHeaders = require("./copyHeaders");
 
 async function proxy(request, reply) {
@@ -30,7 +30,7 @@ async function proxy(request, reply) {
 
   try {
     // Fetch the image as a stream using undici
-    const response = await request(request.params.url, {
+    const response = await undici.request(request.params.url, {
       headers: {
         ...pick(request.headers, ["cookie", "dnt", "referer", "range"]),
         "user-agent": "Bandwidth-Hero Compressor",

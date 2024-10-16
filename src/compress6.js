@@ -34,7 +34,7 @@ async function compress(req, reply, input) {
 
         // Log the current state of the worker queue
         console.log("QUEUE:: ", worker.counters());
-        console.log(`[COMPRESS] BEGIN: compressing file ${req.path}`);
+        console.log(`[COMPRESS] BEGIN: compressing file`);
 
         // Set headers and send the compressed image as a response
         reply
@@ -45,7 +45,7 @@ async function compress(req, reply, input) {
             .code(200)
             .send(output);
 
-        console.log(`[COMPRESS] OK: compressed file sent ${req.path}`);
+        console.log(`[COMPRESS] OK: compressed file sent`);
     } catch (err) {
         console.error('Compression error:', err);
         return redirect(req, reply); // Redirect on error

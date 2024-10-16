@@ -54,12 +54,12 @@ async function proxy(request, reply) {
     request.params.originType = response.headers['content-type'] || '';
     request.params.originSize = parseInt(response.headers['content-length'], 10) || 0;
 
-    // Stream error handling: redirect first, then destroy the stream if errors occur
+    /*// Stream error handling: redirect first, then destroy the stream if errors occur
     responseStream.on('error', (err) => {
       console.error('Stream error:', err);
       redirect(request, reply); // Redirect first
       responseStream.destroy(); // Destroy the stream after redirect
-    });
+    });*/
 
     // Check if the response should be compressed
     if (shouldCompress(request)) {
@@ -74,9 +74,9 @@ async function proxy(request, reply) {
     // Redirect first before destroying the stream
     redirect(request, reply);
 
-    if (responseStream) {
+   /*if (responseStream) {
       responseStream.destroy(); // Destroy the response stream after redirecting
-    }
+    }*/
 
     return; // Ensure the function ends here
   }
