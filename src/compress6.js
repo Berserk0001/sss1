@@ -13,27 +13,19 @@ async function compress(req, reply, input) {
     console.log("QUEUE:: ", worker.counters());
     console.log(`[COMPRESS] BEGIN: compressing file`);
 
-    // Initialize sharp transformation with grayscale option and WebP format
-    const transform = worker()
-        .grayscale(req.params.grayscale)
-        .toFormat(format, {
+    try {
+        // Pipe the input stream into sharp, apply transformations, and convert to buffer in one line
+        const output = await input.pipe(worker().grayscale(req.params.grayscale).toFormat(format, {
             quality: req.params.quality,
             progressive: true,
             optimizeScans: true,
             effort: 0, // Use effort=1 for faster WebP compression
-            
-        });
+            smartSubsample: false, // WebP specific option for better chroma subsampling
+            lossless: false // Lossless compression set to false
+        })).toBuffer();
 
-    try {
-        // Pipe the input stream into sharp, apply transformations, and convert to buffer
-        const output = await input.pipe(transform).toBuffer();
         const metadata = await sharp(output).metadata(); // Retrieve metadata like file size
 
-       /* // If the image dimensions exceed WebP limits (16383 x 16383), handle accordingly
-        if (metadata.height > 16383 || metadata.width > 16383) {
-            console.error('Image dimensions exceed WebP limits.');
-            return redirect(req, reply); // Redirect if the image is too large
-        }*/
         console.log(`[COMPRESS] OK: compressed file sent`);
 
         // Set headers and send the compressed image as a response
