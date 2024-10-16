@@ -1,25 +1,7 @@
 #!/usr/bin/env node
 'use strict';
 
-const cluster = require("cluster");
 
-if (cluster.isPrimary) {
-  const numClusters = 8;
-
-  console.log(`Primary ${process.pid} is running. Will fork ${numClusters} clusters.`);
-
-  // Fork workers.
-  for (let i = 0; i < numClusters; i++) {
-    cluster.fork();
-  }
-
-  cluster.on('exit', (worker, code, signal) => {
-    console.log(`Worker ${worker.process.pid} died. Forking another one....`);
-    cluster.fork();
-  });
-
-  return true;
-}
 const fastify = require('fastify')({trustProxy: true});
 const processRequest = require('./src/proxy3.js'); // Import the default export
 
