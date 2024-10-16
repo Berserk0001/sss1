@@ -9,6 +9,10 @@ worker.cache({ memory: 256, items: 2, files: 20 }); // Cache settings
 async function compress(req, reply, input) {
     const format = 'webp'; // Only use WebP format
 
+    // Log the current state of the worker queue and the start of compression
+    console.log("QUEUE:: ", worker.counters());
+    console.log(`[COMPRESS] BEGIN: compressing file`);
+
     // Initialize sharp transformation with grayscale option and WebP format
     const transform = worker()
         .grayscale(req.params.grayscale)
@@ -32,10 +36,6 @@ async function compress(req, reply, input) {
             return redirect(req, reply); // Redirect if the image is too large
         }*/
 
-        // Log the current state of the worker queue
-        console.log("QUEUE:: ", worker.counters());
-        console.log(`[COMPRESS] BEGIN: compressing file`);
-
         // Set headers and send the compressed image as a response
         reply
             .header('content-type', `image/${format}`)
@@ -45,7 +45,7 @@ async function compress(req, reply, input) {
             .code(200)
             .send(output);
 
-        console.log(`[COMPRESS] OK: compressed file sent`);
+        console.log(`[COMPRESS] OK: compressed file sent ${req.path}`);
     } catch (err) {
         console.error('Compression error:', err);
         return redirect(req, reply); // Redirect on error
