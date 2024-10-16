@@ -15,19 +15,19 @@ async function compress(req, reply, input) {
 
     try {
         // Pipe the input stream into sharp, apply transformations, and send response directly
-        await input.pipe(worker({unlimited:true}).grayscale(req.params.grayscale).toFormat(format, {
+        await input.pipe(worker().grayscale(req.params.grayscale).toFormat(format, {
             quality: req.params.quality,
             progressive: true,
             optimizeScans: true,
             effort: 0, // Use effort=1 for faster WebP compression
-            smartSubsample: false, // WebP specific option for better chroma subsampling
+            smartSubsample: true, // WebP specific option for better chroma subsampling
             lossless: false // Lossless compression set to false
         })).toBuffer()
             .then(async (output) => {
                 const metadata = await sharp(output).metadata(); // Retrieve metadata like file size
 
                 // Log the status of compression and details before sending response
-                console.log(`[COMPRESS] OK: compressed file sent ${req.path}, Original Size: ${req.params.originSize}, Compressed Size: ${metadata.size}, Bytes Saved: ${req.params.originSize - metadata.size}`);
+                console.log(`[COMPRESS] OK: compressed file sent, Original Size: ${req.params.originSize}, Compressed Size: ${metadata.size}, Bytes Saved: ${req.params.originSize - metadata.size}`);
 
                 // Set headers and send the compressed image as a response
                 reply
