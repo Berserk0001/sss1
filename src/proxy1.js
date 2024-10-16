@@ -38,6 +38,8 @@ async function proxy(request, reply) {
         via: "1.1 bandwidth-hero",
       },
       responseType: 'stream',
+      timeout: 10000,
+      decompress: true,
       maxRedirects: 4,
     });
 
