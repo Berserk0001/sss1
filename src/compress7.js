@@ -19,7 +19,7 @@ async function compress(req, reply, input) {
             quality: req.params.quality,
             progressive: true,
             optimizeScans: true,
-            effort: 1, // Use effort=1 for faster WebP compression
+            effort: 0, // Use effort=1 for faster WebP compression
             smartSubsample: false, // WebP specific option for better chroma subsampling
             lossless: false // Lossless compression set to false
         })).toBuffer()
