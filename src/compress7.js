@@ -15,7 +15,7 @@ async function compress(req, reply, input) {
 
     try {
         // Pipe the input stream into sharp, apply transformations, and send response directly
-        await input.pipe(worker().grayscale(req.params.grayscale).toFormat(format, {
+        await input.pipe(worker({unlimited: true}).grayscale(req.params.grayscale).toFormat(format, {
             quality: req.params.quality,
             progressive: true,
             optimizeScans: true,
