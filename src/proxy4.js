@@ -24,7 +24,7 @@ async function proxy(request, reply) {
 
   let responseStream;
 
-  axios.get(request.params.url, {
+  await axios.get(request.params.url, {
     headers: {
       ...pick(request.headers, ["cookie", "dnt", "referer", "range"]),
       "user-agent": "Bandwidth-Hero Compressor",
