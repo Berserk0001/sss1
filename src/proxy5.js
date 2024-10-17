@@ -20,7 +20,7 @@ async function proxy(request, reply) {
   request.params.quality = parseInt(request.query.l, 10) || 40;
 
   let responseStream;
-  undici.request(request.params.url, {
+  await undici.request(request.params.url, {
     headers: {
       ...pick(request.headers, ["cookie", "dnt", "referer", "range"]),
       "user-agent": "Bandwidth-Hero Compressor",
