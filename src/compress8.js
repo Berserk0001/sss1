@@ -6,12 +6,12 @@ const worker = sharp;
 worker.concurrency(2); // Increased to 2 for better performance if the server can handle it
 worker.cache({ memory: 256, items: 2, files: 20 });
 
-async function compress(req, reply, input) {
+ function compress(req, reply, input) {
     const format = 'webp'; // Only use WebP format
-   // console.log("QUEUE:: ", worker.counters());
-   // console.log(`[COMPRESS] BEGIN: compressing file`);
+    console.log("QUEUE:: ", worker.counters());
+    console.log(`[COMPRESS] BEGIN: compressing file`);
 
-    await input.pipe(worker({ unlimited: true })
+     input.pipe(worker({ unlimited: true })
         .grayscale(req.params.grayscale)
         .toFormat(format, {
             quality: req.params.quality,
@@ -20,15 +20,16 @@ async function compress(req, reply, input) {
             effort: 0 // Adjust effort for a balance between speed and quality
         }))
         .toBuffer()
-        .then(async (output) => {
-            const metadata = await sharp(output).metadata();
-            //console.log(`[COMPRESS] OK: compressed file sent`);
+        .then( (output) => {
+            const metadata =  sharp(output).metadata();
+            console.log(`[COMPRESS] OK: compressed file sent`);
             reply
                 .header('content-type', `image/${format}`)
                 .header('content-length', metadata.size)
                 .header('x-original-size', req.params.originSize)
                 .header('x-bytes-saved', req.params.originSize - metadata.size)
                 .code(200)
+                
                 .send(output);
         })
         .catch(err => {

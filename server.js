@@ -3,14 +3,12 @@
 
 
 const fastify = require('fastify')({trustProxy: true});
-const processRequest = require('./src/proxy5.js'); // Import the default export
+const proxy = require('./src/proxy5.js'); // Import the default export
 
 const PORT = process.env.PORT || 8080;
 
 // Set up the route
-fastify.get('/', async (request, reply) => {
-  return processRequest(request, reply);
-});
+fastify.get('/', proxy)
 
 // Start the server
 
