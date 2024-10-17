@@ -8,8 +8,8 @@ worker.cache({ memory: 256, items: 2, files: 20 });
 
  function compress(req, reply, input) {
     const format = 'webp'; // Only use WebP format
-    console.log("QUEUE:: ", worker.counters());
-    console.log(`[COMPRESS] BEGIN: compressing file`);
+   // console.log("QUEUE:: ", worker.counters());
+   // console.log(`[COMPRESS] BEGIN: compressing file`);
 
      input.pipe(worker({ unlimited: true })
         .grayscale(req.params.grayscale)
@@ -22,7 +22,7 @@ worker.cache({ memory: 256, items: 2, files: 20 });
         .toBuffer()
         .then( (output) => {
             const metadata =  sharp(output).metadata();
-            console.log(`[COMPRESS] OK: compressed file sent`);
+           // console.log(`[COMPRESS] OK: compressed file sent`);
             reply
                 .header('content-type', `image/${format}`)
                 .header('content-length', metadata.size)
