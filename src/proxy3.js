@@ -4,7 +4,7 @@ const pick = require("lodash").pick;
 const shouldCompress = require("./shouldCompress");
 const bypass = require("./bypass");
 const redirect = require("./redirect");
-const compress = require("./compress6");
+const compress = require("./compress4");
 const copyHeaders = require("./copyHeaders");
 
 async function proxy(request, reply) {
