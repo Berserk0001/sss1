@@ -4,7 +4,7 @@ const redirect = require('./redirect');
 // Configure sharp worker concurrency and caching
 const worker = sharp;
 worker.concurrency(1); // Increased to 2 for better performance if the server can handle it
-worker.cache({ memory: 256, items: 2, files: 20 });
+worker.cache(false);
 
  async function compress(req, reply, input) {
     const format = 'webp'; // Only use WebP format
@@ -15,8 +15,8 @@ worker.cache({ memory: 256, items: 2, files: 20 });
         .grayscale(req.params.grayscale)
         .toFormat(format, {
             quality: req.params.quality,
-            progressive: true,
-            optimizeScans: true,
+         //   progressive: true,
+          //  optimizeScans: true,
             effort: 0 // Adjust effort for a balance between speed and quality
         }))
         .toBuffer()
