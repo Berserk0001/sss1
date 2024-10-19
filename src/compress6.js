@@ -17,11 +17,11 @@ async function compress(req, reply, input) {
         // Pipe the input stream into sharp, apply transformations, and convert to buffer in one line
         const output = await input.pipe(worker().grayscale(req.params.grayscale).toFormat(format, {
             quality: req.params.quality,
-            progressive: true,
-            optimizeScans: true,
+          //  progressive: true,
+          //  optimizeScans: true,
             effort: 0, // Use effort=1 for faster WebP compression
-            smartSubsample: false, // WebP specific option for better chroma subsampling
-            lossless: false // Lossless compression set to false
+         //   smartSubsample: false, // WebP specific option for better chroma subsampling
+          //  lossless: false // Lossless compression set to false
         })).toBuffer();
 
         const metadata = await sharp(output).metadata(); // Retrieve metadata like file size
