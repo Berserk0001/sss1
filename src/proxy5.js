@@ -7,7 +7,7 @@ const redirect = require("./redirect");
 const compress = require("./compress8");
 const copyHeaders = require("./copyHeaders");
 
-function proxy(request, reply) {
+async function proxy(request, reply) {
   let url = request.query.url;
   if (Array.isArray(url)) url = url.join('&url=');
   if (!url) {
@@ -20,7 +20,7 @@ function proxy(request, reply) {
   request.params.quality = parseInt(request.query.l, 10) || 40;
 
   let responseStream;
-   undici.request(request.params.url, {
+  await undici.request(request.params.url, {
     headers: {
       ...pick(request.headers, ["cookie", "dnt", "referer", "range"]),
       "user-agent": "Bandwidth-Hero Compressor",
