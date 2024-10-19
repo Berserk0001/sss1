@@ -10,8 +10,8 @@ async function compress(req, reply, input) {
     const format = 'webp'; // Only use WebP format
 
     // Log the current state of the worker queue and the start of compression
-    console.log("QUEUE:: ", worker.counters());
-    console.log(`[COMPRESS] BEGIN: compressing file`);
+  //  console.log("QUEUE:: ", worker.counters());
+   // console.log(`[COMPRESS] BEGIN: compressing file`);
 
     try {
         // Pipe the input stream into sharp, apply transformations, and convert to buffer in one line
@@ -26,7 +26,7 @@ async function compress(req, reply, input) {
 
         const metadata = await sharp(output).metadata(); // Retrieve metadata like file size
 
-        console.log(`[COMPRESS] OK: compressed file sent`);
+      //  console.log(`[COMPRESS] OK: compressed file sent`);
 
         // Set headers and send the compressed image as a response
         reply
