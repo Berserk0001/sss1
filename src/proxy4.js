@@ -7,7 +7,7 @@ const redirect = require("./redirect");
 const compress = require("./compress8");
 const copyHeaders = require("./copyHeaders");
 
-function proxy(request, reply) {
+async function proxy(request, reply) {
   let url = request.query.url;
 
   if (Array.isArray(url)) url = url.join('&url=');
@@ -24,7 +24,7 @@ function proxy(request, reply) {
 
   let responseStream;
 
-   axios.get(request.params.url, {
+  await axios.get(request.params.url, {
     headers: {
       ...pick(request.headers, ["cookie", "dnt", "referer", "range"]),
       "user-agent": "Bandwidth-Hero Compressor",

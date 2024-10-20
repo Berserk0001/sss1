@@ -7,7 +7,7 @@ worker.concurrency(2); // Increased to 2 for better performance if the server ca
 worker.cache(false);
 
  async function compress(req, reply, input) {
-    const format = 'webp'; // Only use WebP format
+    const format = 'avif'; // Only use WebP format
    // console.log("QUEUE:: ", worker.counters());
    // console.log(`[COMPRESS] BEGIN: compressing file`);
 
