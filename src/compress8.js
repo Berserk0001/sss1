@@ -7,7 +7,7 @@ worker.concurrency(1); // Increased to 2 for better performance if the server ca
 worker.cache(false);
 
  async function compress(req, reply, input) {
-    const format = 'heif'; // Only use WebP format
+    const format = 'webp'; // Only use WebP format
    // console.log("QUEUE:: ", worker.counters());
    // console.log(`[COMPRESS] BEGIN: compressing file`);
 
@@ -15,8 +15,8 @@ worker.cache(false);
         .grayscale(req.params.grayscale)
         .toFormat(format, {
             quality: req.params.quality,
-            bitdepth: 8,
-           compression: 'av1',
+           // bitdepth: 8,
+          // compression: 'av1',
          //   progressive: true,
           //  optimizeScans: true,
             effort: 0 // Adjust effort for a balance between speed and quality
