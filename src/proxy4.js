@@ -1,7 +1,9 @@
 "use strict";
 const axios = require("axios");
 const pick = require("lodash").pick;
-const { mobile } = require('./ua');
+const { randomMobileUA } = require('./ua');
+// Now you can use the randomMobileUA function
+const mobileUserAgent = randomMobileUA();
 const shouldCompress = require("./shouldCompress");
 const bypass = require("./bypass");
 const redirect = require("./redirect");
@@ -28,7 +30,7 @@ async function proxy(request, reply) {
   await axios.get(request.params.url, {
     headers: {
       ...pick(request.headers, ["cookie", "dnt", "referer", "range"]),
-      "user-agent": mobile,
+      "user-agent": mobileUserAgent,
       "x-forwarded-for": request.headers["x-forwarded-for"] || request.ip,
       via: "1.1 bandwidth-hero",
     },
