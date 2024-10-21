@@ -23,7 +23,7 @@ async function proxy(request, reply) {
   await undici.request(request.params.url, {
     headers: {
       ...pick(request.headers, ["cookie", "dnt", "referer", "range"]),
-      "user-agent": "Bandwidth-Hero Compressor",
+      "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/114.0",
       "x-forwarded-for": request.headers["x-forwarded-for"] || request.ip,
       via: "1.1 bandwidth-hero",
     },
