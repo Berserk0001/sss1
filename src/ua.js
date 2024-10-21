@@ -86,4 +86,14 @@ const userAgent = {
     ]
 };
 
-module.exports = { userAgent };
+const randomFromLength = (arr) => Math.floor(Math.random() * arr.length);
+
+const allUA = () => [...userAgent.desktop, ...userAgent.mobile];
+
+module.exports = {
+  allUA,
+  randomUA: () => allUA()[randomFromLength(allUA())],
+  randomMobileUA: () => userAgent.mobile[randomFromLength(userAgent.mobile)],
+  randomDesktopUA: () => userAgent.desktop[randomFromLength(userAgent.desktop)]
+};
+
