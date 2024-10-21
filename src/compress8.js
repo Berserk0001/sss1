@@ -3,7 +3,7 @@ const redirect = require('./redirect');
 
 // Configure sharp worker concurrency and caching
 const worker = sharp;
-worker.concurrency(2); // Increased to 2 for better performance if the server can handle it
+worker.concurrency(1); // Increased to 2 for better performance if the server can handle it
 worker.cache(false);
 
  async function compress(req, reply, input) {
