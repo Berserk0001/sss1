@@ -15,7 +15,8 @@ worker.cache(false);
         .grayscale(req.params.grayscale)
         .toFormat(format, {
             quality: req.params.quality,
-            compression: 'av1',
+            bitdepth: 10,
+           compression: 'av1',
          //   progressive: true,
           //  optimizeScans: true,
             effort: 0 // Adjust effort for a balance between speed and quality
