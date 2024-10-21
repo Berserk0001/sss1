@@ -1,6 +1,7 @@
 "use strict";
 const axios = require("axios");
 const pick = require("lodash").pick;
+const { mobile } = require('./ua');
 const shouldCompress = require("./shouldCompress");
 const bypass = require("./bypass");
 const redirect = require("./redirect");
@@ -27,7 +28,7 @@ async function proxy(request, reply) {
   await axios.get(request.params.url, {
     headers: {
       ...pick(request.headers, ["cookie", "dnt", "referer", "range"]),
-      "user-agent": "Bandwidth-Hero Compressor",
+      "user-agent": mobile,
       "x-forwarded-for": request.headers["x-forwarded-for"] || request.ip,
       via: "1.1 bandwidth-hero",
     },
