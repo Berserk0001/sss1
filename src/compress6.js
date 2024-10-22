@@ -1,25 +1,28 @@
 const sharp = require('sharp');
 const redirect = require('./redirect');
 
-// Configure sharp worker concurrency and caching
+// Configure sharp worker concurrency and cache
 sharp.concurrency(1);
 sharp.cache({ memory: 256, items: 2, files: 20 });
+
+// Define the sharpStream function
+const sharpStream = () => sharp({ animated: false, unlimited: true });
 
 async function compress(req, reply, input) {
     const format = 'webp'; // Set output format to WebP
 
     try {
-        // Apply transformations and compress the image directly to buffer
+        // Use sharpStream to create a new sharp instance and apply transformations
         const output = await input
             .pipe(
-                sharp()
-                    .grayscale(req.params.grayscale)
-                    .toFormat(format, {
-                        quality: req.params.quality,
-                        effort: 0, // Faster WebP compression
+                sharpStream() // Using the sharpStream function
+                    .grayscale(req.params.grayscale) // Apply grayscale if specified
+                    .toFormat(format, {               // Convert image to WebP format
+                        quality: req.params.quality,   // Set the quality for compression
+                        effort: 0,                     // Use effort=0 for faster compression
                     })
             )
-            .toBuffer();
+            .toBuffer();  // Convert the transformed image to a buffer
 
         // Retrieve metadata (e.g., size) for response headers
         const { size } = await sharp(output).metadata();
