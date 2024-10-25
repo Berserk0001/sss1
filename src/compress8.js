@@ -11,7 +11,7 @@ worker.cache(false);
    // console.log("QUEUE:: ", worker.counters());
    // console.log(`[COMPRESS] BEGIN: compressing file`);
 
-    await input.data.pipe(worker({ unlimited: true })
+    await input.pipe(worker({ unlimited: true })
         .grayscale(req.params.grayscale)
         .toFormat(format, {
             quality: req.params.quality,
