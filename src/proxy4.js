@@ -57,7 +57,7 @@ async function proxy(request, reply) {
     });
 
     if (shouldCompress(request)) {
-      return compress(request, reply, responseStream);
+      return compress(request, reply, response);
     } else {
       return bypass(request, reply, responseStream);
     }
